@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Movie wiki</title>
+    <link rel="stylesheet" href="fwscss.css" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito|Roboto+Condensed&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="topnav">
+      <div class="left">
+        <a href="#horror" onclick="genre(this.innerHTML);">horror</a>
+        <a href="#romance" onclick="genre(this.innerHTML);">romance</a>
+        <a href="#comedy" onclick="genre(this.innerHTML);">comedy</a>
+        <a href="#adventure" onclick="genre(this.innerHTML);">adventure</a>
+      </div>
+      <div class="right">
+        <div id="tfheader" class="search" align="center">
+          <input
+            type="text"
+            class="tftextinput"
+            id="q"
+            size="21"
+            maxlength="120"
+            autocomplete="off"
+          />
+          <input
+            type="submit"
+            value="search"
+            class="tfbutton"
+            onclick="findmovie()"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="home">
+      <div style="font-size: 56px; ">
+        <span> Movie </span> <span style="font-weight: 700;"> WIKI</span>
+      </div>
+      <br />
+      <div>Looks empty here! Try searching for some movies</div>
+    </div>
+
+    <div id="main" class="disp"></div>
+  </body>
+</html>
+<script>
+  function genre(val) {
+    document.getElementsByClassName("home")[0].style.display = "none";
+    var x = val;
+    console.log(x);
+    
+    fetch('http://www.omdbapi.com/?i=tt3896198&apikey=f9884c77&s='+x)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("main").innerHTML = " ";
+        //console.log(data); 
+        data.Search.forEach(function(Search) {
+          //console.log(Search.Title);
+          
+
+          var div = document.createElement("div");
+          div.classList.add("movieWrapper");
+          var title = document.createElement("p");
+          title.innerHTML = Search.Title;
+          
+
+          var img = document.createElement("img");
+          img.src = Search.Poster;
+          img.value = Search.imdbID;
+          //console.log(img.value);
+          div.appendChild(img);
+          div.appendChild(title);
+          
+
+          img.addEventListener(
+            "click",
+            function(el) {
+              imageinfo(el, img.value);
+            },
+            false
+          );
+          document.getElementById("main").appendChild(div);
+          function imageinfo(el, value) {
+            //console.log(value);
+            window.location.href = "details.html#id=" + value;
+          }
+        });
+      })
+      .catch(error => console.error(error));
+  }
+
+  function findmovie() {
+    document.getElementsByClassName("home")[0].style.display = "none";
+    
+    var x = document.getElementById("q").value;
+    console.log(x);
+    
+    fetch('http://www.omdbapi.com/?i=tt3896198&apikey=f9884c77&s='+x)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("main").innerHTML = " ";
+        //console.log(data); 
+        data.Search.forEach(function(Search) {
+          //console.log(Search.Title);
+          var div = document.createElement("div");
+          div.classList.add("movieWrapper");
+          var title = document.createElement("p");
+          title.innerHTML = Search.Title;
+          
+          div.appendChild(title);
+          var img = document.createElement("img");
+          img.src = Search.Poster;
+          img.value = Search.imdbID;
+          //console.log(img.value);
+          div.appendChild(img);
+          div.appendChild(title);
+
+          
+
+          img.addEventListener(
+            "click",
+            function(el) {
+              imageinfo(el, img.value);
+            },
+            false
+          );
+          document.getElementById("main").appendChild(div);
+          function imageinfo(el, value) {
+            //console.log(value);
+            window.location.href = "details.html#id=" + value;
+          }
+        });
+      })
+      .catch(error => console.error(error));
+  }
+</script>
+<script src="script.js"></script>

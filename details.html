@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="fwscss.css" />
+  </head>
+  <script>
+    window.onload = function() {
+      var a = window.location.href.split("#")[1];
+     
+      var x = a.split("=")[1];
+      console.log(x);
+      
+      fetch("http://www.omdbapi.com/?apikey=f9884c77&i=" + x)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("title").innerHTML = data.Title;
+          var img = document.createElement("img");
+          img.src = data.Poster;
+          document.getElementById("img").appendChild(img);
+          document.getElementById("year").innerHTML = data.Released;
+          document.getElementById("content").innerHTML = data.Plot;
+          document.getElementById("Rating").innerHTML = data.imdbRating;
+          document.getElementById("lang").innerHTML = data.Language;
+          document.getElementById("time").innerHTML = data.Runtime;
+          document.getElementById("awards").innerHTML = data.Awards;
+
+          var a = data.Genre.split(",");
+          for (var i = 0; i < a.length; i++) {
+            document.getElementById("genre").innerHTML = a[i];
+          }
+          
+        });
+
+      document.getElementById;
+    };
+  </script>
+  <body class="assignment-wrapper">
+    <div class="box">
+      <div class="left-side"><div id="img"></div></div>
+      <div class="right-side">
+        <div id="title"></div>
+        <div class="light-font">
+          <div id="year"></div>
+          <div class="bar">|</div>
+          <div id="lang"></div>
+          <div class="bar">|</div>
+          <div id="time"></div>
+        </div>
+        <div id="content"></div>
+        <div class="heading">IMDb Rating: <span id="Rating"></span></div>
+
+        <div class="heading">
+          Awards:
+          <span id="awards"></span>
+        </div>
+
+        <div id="genre"></div>
+      </div>
+    </div>
+  </body>
+  <script src="script.js"></script>
+</html>
