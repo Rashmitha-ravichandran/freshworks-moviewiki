@@ -28,6 +28,7 @@
             value="search"
             class="tfbutton"
             onclick="findmovie()"
+            style="cursor: pointer;"
           />
         </div>
       </div>
@@ -41,14 +42,17 @@
     </div>
 
     <div id="main" class="disp"></div>
-    <button id="loadMore" onclick="loadMore()" >Load More </button>
+    <div style="display: none; align-items: center; justify-content: center;" id="loadmore-button"><button id="loadMore" style="background: #eee40d; padding: 8px 20px; font-size: 16px; outline: none; border: none; border-radius: 8px; margin: 20px;  cursor: pointer;" onclick="loadMore()" >Load More </button></div>
 
   </body>
 </html>
 <script>
+
+
     var page = 1;
     var allMovies = [];
   function genre(val) {
+    document.getElementById("loadmore-button").style.display = "none";
     document.getElementsByClassName("home")[0].style.display = "none";
     var x = val;
     console.log(x);
@@ -99,6 +103,7 @@
 
  }
   function findmovie() {
+    document.getElementById("loadmore-button").style.display = "flex";
     document.getElementsByClassName("home")[0].style.display = "none";
     
     var x = document.getElementById("q").value;
