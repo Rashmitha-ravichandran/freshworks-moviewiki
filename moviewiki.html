@@ -41,9 +41,13 @@
     </div>
 
     <div id="main" class="disp"></div>
+    <button id="loadMore" onclick="loadMore()" >Load More </button>
+
   </body>
 </html>
 <script>
+    var page = 1;
+    var allMovies = [];
   function genre(val) {
     document.getElementsByClassName("home")[0].style.display = "none";
     var x = val;
@@ -88,18 +92,22 @@
       })
       .catch(error => console.error(error));
   }
+ function loadMore()
+ {
+   findmovie();
 
+
+ }
   function findmovie() {
     document.getElementsByClassName("home")[0].style.display = "none";
     
     var x = document.getElementById("q").value;
     console.log(x);
     
-    fetch('http://www.omdbapi.com/?i=tt3896198&apikey=f9884c77&s='+x)
+    fetch('http://www.omdbapi.com/?i=tt3896198&apikey=f9884c77&s='+x+'&page='+page)
       .then(response => response.json())
       .then(data => {
-        document.getElementById("main").innerHTML = " ";
-        //console.log(data); 
+        allMovies = [...allMovies, ...data.Search];
         data.Search.forEach(function(Search) {
           //console.log(Search.Title);
           var div = document.createElement("div");
@@ -113,9 +121,7 @@
           img.value = Search.imdbID;
           //console.log(img.value);
           div.appendChild(img);
-          div.appendChild(title);
-
-          
+          div.appendChild(title);   
 
           img.addEventListener(
             "click",
@@ -130,6 +136,9 @@
             window.location.href = "details.html#id=" + value;
           }
         });
+        if(allMovies.length != data.totalResults){
+            page++;
+        }
       })
       .catch(error => console.error(error));
   }
