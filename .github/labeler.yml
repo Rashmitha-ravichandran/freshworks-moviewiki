@@ -2,5 +2,4 @@ version: 1
 
 labels:
 - label: "Force merged"
-  branch: "master*"
-  mergeable: false
+  branch: "master"
