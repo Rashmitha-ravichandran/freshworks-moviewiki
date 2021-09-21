@@ -1,6 +1,6 @@
 version: 1
-labels:
 
+labels:
 - label: "Force merged"
-  branch: "master"
+  branch: "master*"
   mergeable: false
