@@ -4,3 +4,4 @@ labels:
 - label: "Force merged"
   branch: ".:*"
   mergeable: false
+  base: "master"
