@@ -30,6 +30,10 @@ on:
   pull_request_target:
     types: [closed, edited]
 
+  pull_request:
+     branches:
+       - master
+
 jobs:
   build:
 
