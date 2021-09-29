@@ -29,7 +29,7 @@ name: Label PRs
 on:
   pull_request_target:
     types: [closed, edited]
-    branches:
+     branches:
        - master
 
 jobs:
@@ -40,4 +40,4 @@ jobs:
     steps:
     - uses: srvaroa/labeler@master
       env:
-        GITHUB_TOKEN: "Rashmitha r"
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
