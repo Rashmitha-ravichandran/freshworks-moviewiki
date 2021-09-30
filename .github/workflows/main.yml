@@ -38,6 +38,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: Rashmitha-ravichandran/labeler
+      - uses: Rashmitha-ravichandran/labeler@master
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
