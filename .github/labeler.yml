@@ -3,5 +3,5 @@ version: 1
 labels:
 - label: "Force merged"
   branch: ".:*"
-  mergeable: false
+  mergeable: true
  
