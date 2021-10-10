@@ -27,10 +27,7 @@
 name: Label PRs
 
 on:
-  pull_request_target:
-    types: [closed, edited]
-    branches:
-      - master
+  - pull_request
 
 jobs:
   build:
