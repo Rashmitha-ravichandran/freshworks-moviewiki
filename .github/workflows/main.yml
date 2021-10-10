@@ -28,13 +28,14 @@ name: Label PRs
 
 on:
   pull_request:
-    types: [closed,edited,merged]
+    types: [closed, edited]
+    
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    if: github.event.pull_request.merged == true
     steps:
       - uses: Rashmitha-ravichandran/labeler@master
         env:
