@@ -15,11 +15,14 @@
 #         env:
 #           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-on: [push]
+on:
+  pull_request:
+    types: [push, closed, edited]
 
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     name: A job to say hello
     steps:
       # To use this repository's private action,
