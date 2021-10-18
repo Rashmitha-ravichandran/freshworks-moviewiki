@@ -14,12 +14,12 @@ try {
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
   const context = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event context: ${context}`);
+  //console.log(`The event context: ${context}`);
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
   console.log(`The owner and repo in context: ${owner} ${repo} `);
   async function myAsyncMethod () {
-    const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
+    const { data } = await octokit.request("GET /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
         owner,
         repo,
       });
@@ -30,7 +30,7 @@ try {
 //   });
   const {data} = myAsyncMethod();
   console.log("data from octokit: %s", data);
-  const strdata = JSON.stringify(data, undefined, 2)
+  const strdata = JSON.stringify(myAsyncMethod(), undefined, 2)
   console.log(`The stringified  data: ${strdata}`);
 } catch (error) {
   core.setFailed(error.message);
