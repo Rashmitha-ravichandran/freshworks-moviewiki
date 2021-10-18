@@ -30,6 +30,9 @@ try {
 //   });
   const data = myAsyncMethod();
   console.log("data from octokit: %s", data);
+  data.then(function(result) {
+    console.log(result) // "Some User token"
+ })
   const strdata = JSON.stringify(myAsyncMethod(), undefined, 2)
   console.log(`The stringified  data: ${strdata}`);
 } catch (error) {
