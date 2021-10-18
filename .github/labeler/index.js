@@ -1,6 +1,8 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { Octokit } = require("@octokit/action");
 // const axios = require('axios');
+const octokit = new Octokit();
 
 try {
   // `who-to-greet` input defined in action metadata file
@@ -13,7 +15,16 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const context = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event context: ${context}`);
-  //const pr = JSON.stringify(github.context.head_ref, undefined, 2)
+  const owner = github.context.payload.repository.owner.login;
+  const repo = github.context.payload.repository.name;
+  console.log(`The owner and repo in context: ${owner} ${repo} `);
+  const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
+    owner,
+    repo,
+  });
+  console.log("data from octokit: %s", data);
+  const strdata = JSON.stringify(data, undefined, 2)
+  console.log(`The stringified  data: ${strdata}`);
 } catch (error) {
   core.setFailed(error.message);
 }
