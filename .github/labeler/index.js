@@ -19,7 +19,7 @@ try {
   const repo = github.context.payload.repository.name;
   console.log(`The owner and repo in context: ${owner} ${repo} `);
   async function myAsyncMethod () {
-    const { data } = await octokit.request("GET /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
+    const { data } = await octokit.request("GET /repos/{owner}/{repo}/branches/check_the_checks", {
         owner,
         repo,
       });
@@ -28,7 +28,7 @@ try {
 //     owner,
 //     repo,
 //   });
-  const {data} = myAsyncMethod();
+  const data = myAsyncMethod();
   console.log("data from octokit: %s", data);
   const strdata = JSON.stringify(myAsyncMethod(), undefined, 2)
   console.log(`The stringified  data: ${strdata}`);
