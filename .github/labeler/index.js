@@ -18,10 +18,17 @@ try {
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
   console.log(`The owner and repo in context: ${owner} ${repo} `);
-  const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
-    owner,
-    repo,
-  });
+  async function myAsyncMethod () {
+    const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
+        owner,
+        repo,
+      });
+  }
+//   const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
+//     owner,
+//     repo,
+//   });
+  const {data} = myAsyncMethod();
   console.log("data from octokit: %s", data);
   const strdata = JSON.stringify(data, undefined, 2)
   console.log(`The stringified  data: ${strdata}`);
