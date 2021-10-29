@@ -31,11 +31,11 @@ try {
   })
   .then((reviews) => {
     const reviewsStringified = JSON.stringify(reviews, undefined, 2)
-    console.log(`Issues: ${issuesStrreviewsStringifiedingified}`);
+    console.log(`Issues: ${reviewsStringified}`);
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
   });
-  octokit.paginate('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+  octokit.request('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
     owner: owner,
     repo: repo,
     issue_number: prNumber
