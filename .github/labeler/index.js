@@ -21,9 +21,10 @@ try {
   console.log(`repo: ${repo}`);
   const prNumber = github.context.payload.number;
   console.log(`prNumber: ${prNumber}`);
-  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{prNumber}", {
-    owner: "octokit",
-    repo: "rest.js",
+  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
+    owner: owner,
+    repo: repo,
+    pull_number: prNumber
   })
   .then((issues) => {
     const issuesStringified = JSON.stringify(issues, undefined, 2)
