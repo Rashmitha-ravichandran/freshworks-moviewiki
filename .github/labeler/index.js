@@ -32,7 +32,7 @@ try {
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
   });
-  await octokit.request('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+  octokit.paginate('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
     owner: owner,
     repo: repo,
     issue_number: prNumber
