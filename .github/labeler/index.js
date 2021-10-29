@@ -19,7 +19,9 @@ try {
   console.log(`owner: ${owner}`);
   const repo = github.context.payload.repository.name;
   console.log(`repo: ${repo}`);
-  octokit.paginate("GET /repos/{owner}/{repo}/issues", {
+  const prNumber = github.context.payload.number;
+  console.log(`prNumber: ${prNumber}`);
+  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{prNumber}/reviews", {
     owner: "octokit",
     repo: "rest.js",
   })
