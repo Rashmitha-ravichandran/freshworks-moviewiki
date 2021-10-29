@@ -24,7 +24,8 @@ try {
     repo: "rest.js",
   })
   .then((issues) => {
-    console.log(`The event payload: ${issues}`);
+    const issuesStringified = JSON.stringify(issues, undefined, 2)
+    console.log(`Issues: ${issuesStringified}`);
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
   });
