@@ -1,9 +1,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { Octokit } = require("@octokit/rest");
-const octokit = new Octokit({
-  auth: "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",
+octokit.authenticate({
+  type: 'token',
+  username: 'Rashmitha-ravichandran',
+  token: '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'
 });
+
 try {
   // `who-to-greet` input defined in action metadata file
   const nameToGreet = core.getInput('who-to-greet');
@@ -20,7 +23,7 @@ try {
   console.log(`owner: ${owner}`);
   const repo = github.context.payload.repository.name;
   console.log(`repo: ${repo}`);
-  const issues = octokit.paginate("GET /repos/{owner}/{repo}/issues", {
+  octokit.paginate("GET /repos/{owner}/{repo}/issues", {
     owner: "octokit",
     repo: "rest.js",
   })
