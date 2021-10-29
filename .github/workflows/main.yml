@@ -15,12 +15,14 @@
 #         env:
 #           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
+
+
 on:
   pull_request:
     types: [push, closed, edited]
 
 jobs:
-  hello_world_job:
+  lebeler_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
@@ -33,9 +35,36 @@ jobs:
         id: hello
         with:
           who-to-greet: 'Mona the Octocat'
-          pr-details: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+
+
+# on:
+#   pull_request:
+#     types: [push, closed, edited]
+
+# jobs:
+#   hello_world_job:
+#     runs-on: ubuntu-latest
+#     name: A job to say hello
+#     steps:
+#       # To use this repository's private action,
+#       # you must check out the repository
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Hello world action step
+#         uses: ./.github/labeler
+#         id: hello
+#         with:
+#           who-to-greet: 'Mona the Octocat'
+#           pr-details: ${{ secrets.GITHUB_TOKEN }}
+#         env:
+#           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+#       # Use the output from the `hello` step
+#       - name: Get the output time
+#         run: echo "The time was ${{ steps.hello.outputs.time }}"

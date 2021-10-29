@@ -5,8 +5,8 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
-  pr-details:
-    description: 'The PR details'
+  repo-token:
+    description: 'repo-token'
     required: true
 outputs:
   time: # id of output
