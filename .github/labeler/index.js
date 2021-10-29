@@ -35,15 +35,22 @@ try {
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
   });
-  octokit.request('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+
+  octokit.rest.issues.addLabels({
     owner: owner,
     repo: repo,
-    issue_number: prNumber
+    issue_number: prNumber,
+    labels: ["force-merged"]
   })
-  .then((labels) => {
-    const labelsStringified = JSON.stringify(labels, undefined, 2)
-    console.log(`labelsoutput: ${labelsStringified}`);
-  });
+  // octokit.rest.issues('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+  //   owner: owner,
+  //   repo: repo,
+  //   issue_number: prNumber
+  // })
+  // .then((labels) => {
+  //   const labelsStringified = JSON.stringify(labels, undefined, 2)
+  //   console.log(`labelsoutput: ${labelsStringified}`);
+  // });
 } catch (error) {
   core.setFailed(error.message);
 }
