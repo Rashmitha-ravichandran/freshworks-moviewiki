@@ -21,7 +21,7 @@ try {
   console.log(`repo: ${repo}`);
   const prNumber = github.context.payload.number;
   console.log(`prNumber: ${prNumber}`);
-  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}", {
+  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
     owner: owner,
     repo: repo,
     pull_number: prNumber
@@ -31,6 +31,15 @@ try {
     console.log(`Issues: ${issuesStringified}`);
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
+  });
+  await octokit.request('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+    owner: owner,
+    repo: repo,
+    issue_number: prNumber
+  })
+  .then((labels) => {
+    const labelsStringified = JSON.stringify(labels, undefined, 2)
+    console.log(`labelsoutput: ${labelsStringified}`);
   });
 } catch (error) {
   core.setFailed(error.message);
