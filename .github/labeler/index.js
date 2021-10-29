@@ -1,7 +1,10 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { Octokit } = require("@octokit/rest");
-const octokit = new Octokit({});
+
+const GITHUB_TOKEN = core.getInput('repo-token');
+const octokit = github.getOctokit(GITHUB_TOKEN);
+
 
 try {
   // `who-to-greet` input defined in action metadata file
@@ -26,9 +29,9 @@ try {
     repo: repo,
     pull_number: prNumber
   })
-  .then((issues) => {
-    const issuesStringified = JSON.stringify(issues, undefined, 2)
-    console.log(`Issues: ${issuesStringified}`);
+  .then((reviews) => {
+    const reviewsStringified = JSON.stringify(reviews, undefined, 2)
+    console.log(`Issues: ${issuesStrreviewsStringifiedingified}`);
     // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
     // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
   });
