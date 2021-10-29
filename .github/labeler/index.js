@@ -1,9 +1,9 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { Octokit } = require("@octokit/action");
-// const axios = require('axios');
-const octokit = new Octokit();
-
+const { Octokit } = require("@octokit/rest");
+const octokit = new Octokit({
+  auth: "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",
+});
 try {
   // `who-to-greet` input defined in action metadata file
   const nameToGreet = core.getInput('who-to-greet');
@@ -13,28 +13,22 @@ try {
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
-  const context = JSON.stringify(github.context.payload, undefined, 2)
-  //console.log(`The event context: ${context}`);
+  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  console.log(`The event payload: ${payload}`);
+  console.log(`*****************************`);
   const owner = github.context.payload.repository.owner.login;
+  console.log(`owner: ${owner}`);
   const repo = github.context.payload.repository.name;
-  console.log(`The owner and repo in context: ${owner} ${repo} `);
-  async function myAsyncMethod () {
-    const { data } = await octokit.request("GET /repos/{owner}/{repo}/branches/check_the_checks", {
-        owner,
-        repo,
-      });
-  }
-//   const { data } = await octokit.request("POST /repos/{owner}/{repo}/commits/check_the_checks/check-runs", {
-//     owner,
-//     repo,
-//   });
-  const data = myAsyncMethod();
-  console.log("data from octokit: %s", data);
-  data.then(function(result) {
-    console.log(result) // "Some User token"
- })
-  const strdata = JSON.stringify(myAsyncMethod(), undefined, 2)
-  console.log(`The stringified  data: ${strdata}`);
+  console.log(`repo: ${repo}`);
+  const issues = octokit.paginate("GET /repos/{owner}/{repo}/issues", {
+    owner: "octokit",
+    repo: "rest.js",
+  })
+  .then((issues) => {
+    console.log(`The event payload: ${issues}`);
+    // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
+    // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
+  });
 } catch (error) {
   core.setFailed(error.message);
 }
