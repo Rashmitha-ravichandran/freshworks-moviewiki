@@ -40,7 +40,7 @@ try {
     arr.push(reviews[i].state);
     }
    console.log(arr);
-   octokit.paginate("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
+   octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
     owner: owner,
     repo: repo,
     commitSha: commitHash
