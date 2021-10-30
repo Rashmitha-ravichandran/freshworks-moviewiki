@@ -42,6 +42,8 @@ try {
   Promise.all([promise1, promise2]).then((values) => {
     console.log(values);
     let reviews = values[0];
+    let arr = [];
+    let approvalCount = 0;
     for (let i = 0; i < reviews.length; i++) {
       console.log(`...review states each..: ${reviews[i].state}`);
       arr.push(reviews[i].state);
