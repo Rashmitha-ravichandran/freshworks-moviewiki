@@ -16,7 +16,7 @@ try {
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
+  //console.log(`The event payload: ${payload}`);
   console.log(`*****************************`);
   const owner = github.context.payload.repository.owner.login;
   console.log(`owner: ${owner}`);
@@ -24,6 +24,8 @@ try {
   console.log(`repo: ${repo}`);
   const prNumber = github.context.payload.number;
   console.log(`prNumber: ${prNumber}`);
+  const commitHash = github.context.payload.pull_request.head.sha;
+  console.log(`commitHash: ${commitHash}`);
   octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
     owner: owner,
     repo: repo,
@@ -31,19 +33,46 @@ try {
   })
   .then((reviews) => {
     const reviewsStringified = JSON.stringify(reviews, undefined, 2)
-    console.log(`Issues: ${reviewsStringified}`);
-    // issues is an array of all issue objects. It is not wrapped in a { data, headers, status, url } object
-    // like results from `octokit.request()` or any of the endpoint methods such as `octokit.rest.issues.listForRepo()`
-  });
-  octokit.request('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+    console.log(`..reviews..: ${reviewsStringified}`);
+    let arr=[];
+   for(let i=0;i<reviews.length;i++){
+    console.log(`...review states each..: ${reviews[i].state}`);
+    arr.push(reviews[i].state);
+    }
+   console.log(arr);
+   octokit.paginate("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
     owner: owner,
     repo: repo,
-    issue_number: prNumber
+    commitSha: commitHash
   })
-  .then((labels) => {
-    const labelsStringified = JSON.stringify(labels, undefined, 2)
-    console.log(`labelsoutput: ${labelsStringified}`);
+  .then((status) => {
+    const statusStringified = JSON.stringify(status, undefined, 2)
+    console.log(`..status Json..: ${statusStringified}`);
+    })
   });
+
+
+
+  // octokit.rest.issues.addLabels({
+  //   owner: owner,
+  //   repo: repo,
+  //   issue_number: prNumber,
+  //   labels: ["force-merged"]
+  // }).then((response) => {
+  //   const responseStringified = JSON.stringify(response, undefined, 2)
+  //   console.log(`Issues: ${responseStringified}`);
+  // });
+
+
+  // octokit.rest.issues('PUT /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+  //   owner: owner,
+  //   repo: repo,
+  //   issue_number: prNumber
+  // })
+  // .then((labels) => {
+  //   const labelsStringified = JSON.stringify(labels, undefined, 2)
+  //   console.log(`labelsoutput: ${labelsStringified}`);
+  // });
 } catch (error) {
   core.setFailed(error.message);
 }
