@@ -26,48 +26,79 @@ try {
   console.log(`prNumber: ${prNumber}`);
   const commitHash = github.context.payload.pull_request.head.sha;
   console.log(`commitHash: ${commitHash}`);
-  octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
+
+  const promise1 = octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
     owner: owner,
     repo: repo,
     pull_number: prNumber
   })
-    .then((reviews) => {
-      const reviewsStringified = JSON.stringify(reviews, undefined, 2)
-      console.log(`..reviews..: ${reviewsStringified}`);
-      let arr = [];
-      let approvalCount = 0;
-      for (let i = 0; i < reviews.length; i++) {
-        console.log(`...review states each..: ${reviews[i].state}`);
-        arr.push(reviews[i].state);
-        if (reviews[i].state === 'APPROVED') {
-          approvalCount++
-        }
+  const promise2 = octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
+    owner: owner,
+    repo: repo,
+    commitSha: commitHash
+  })
+
+
+  Promise.all([promise1, promise2]).then((values) => {
+    console.log(values);
+    let reviews = values[0];
+    for (let i = 0; i < reviews.length; i++) {
+      console.log(`...review states each..: ${reviews[i].state}`);
+      arr.push(reviews[i].state);
+      if (reviews[i].state === 'APPROVED') {
+        approvalCount++
       }
-      console.log(arr);
-      console.log(approvalCount);
-      octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
-        owner: owner,
-        repo: repo,
-        commitSha: commitHash
-      })
-        .then((status) => {
-          const statusStringified = JSON.stringify(status, undefined, 2)
-          console.log(`..status Json..: ${statusStringified}`);
-          let state = status.data.state;
-          console.log(`..state oFa PR..: ${state}`);
-          if (approvalCount < 1 && state != "success") {
-            octokit.rest.issues.addLabels({
-              owner: owner,
-              repo: repo,
-              issue_number: prNumber,
-              labels: ["force-merged"]
-            }).then((response) => {
-              const responseStringified = JSON.stringify(response, undefined, 2)
-              console.log(`Issues: ${responseStringified}`);
-            });
-          }
-        })
-    });
+    }
+    console.log(arr);
+    console.log(approvalCount);
+
+    let status = values[1];
+    let state = status.data.state;
+    console.log(`..state oFa PR..: ${state}`);
+
+  });
+  // octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
+  //   owner: owner,
+  //   repo: repo,
+  //   pull_number: prNumber
+  // })
+  //   .then((reviews) => {
+  //     const reviewsStringified = JSON.stringify(reviews, undefined, 2)
+  //     console.log(`..reviews..: ${reviewsStringified}`);
+  //     let arr = [];
+  //     let approvalCount = 0;
+  //     for (let i = 0; i < reviews.length; i++) {
+  //       console.log(`...review states each..: ${reviews[i].state}`);
+  //       arr.push(reviews[i].state);
+  //       if (reviews[i].state === 'APPROVED') {
+  //         approvalCount++
+  //       }
+  //     }
+  //     console.log(arr);
+  //     console.log(approvalCount);
+  //     octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
+  //       owner: owner,
+  //       repo: repo,
+  //       commitSha: commitHash
+  //     })
+  //       .then((status) => {
+  //         const statusStringified = JSON.stringify(status, undefined, 2)
+  //         console.log(`..status Json..: ${statusStringified}`);
+  //         let state = status.data.state;
+  //         console.log(`..state oFa PR..: ${state}`);
+  //         if (approvalCount < 1 && state != "success") {
+  //           octokit.rest.issues.addLabels({
+  //             owner: owner,
+  //             repo: repo,
+  //             issue_number: prNumber,
+  //             labels: ["force-merged"]
+  //           }).then((response) => {
+  //             const responseStringified = JSON.stringify(response, undefined, 2)
+  //             console.log(`Issues: ${responseStringified}`);
+  //           });
+  //         }
+  //       })
+  //   });
 
 
 
