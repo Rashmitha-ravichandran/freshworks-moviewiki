@@ -1,16 +1,12 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'labeler'
+description: 'check pr and label force merged PRs'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
-  repo-token:
-    description: 'repo-token'
+  github-token:
+    description: 'github-token'
     required: true
 outputs:
   time: # id of output
-    description: 'The time we greeted you'
+    description: 'The time the action started'
 runs:
   using: 'node12'
   main: 'index.js'
