@@ -49,7 +49,7 @@ try {
       let status = values[1];
       let state = status.data.state;
       console.log(`..state oFa PR..: ${state}`);
-      if (state != "success" && approvalCount < 1) {
+      if (state != "success" || approvalCount < 1) {
         console.log(`..inside if..`);
         octokit.rest.issues.addLabels({
           owner: owner,
