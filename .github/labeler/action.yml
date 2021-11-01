@@ -2,7 +2,7 @@ name: 'labeler'
 description: 'check pr and label force merged PRs'
 inputs:
   github-token:
-    description: 'repo-token'
+    description: 'github-token'
     required: true
 outputs:
   time: # id of output
