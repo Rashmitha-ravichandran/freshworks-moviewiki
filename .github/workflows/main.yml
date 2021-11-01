@@ -33,14 +33,11 @@ jobs:
         uses: ./.github/labeler
         id: labeler
         with:
-          who-to-greet: 'Mona the Octocat'
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    
-
-
-
+      - name: Get the output time
+#         run: echo "The time was ${{ steps.hello.outputs.time }}"
 # on:
 #   pull_request:
 #     types: [push, closed, edited]

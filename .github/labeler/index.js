@@ -5,18 +5,12 @@ const { Octokit } = require("@octokit/rest");
 const GITHUB_TOKEN = core.getInput('repo-token');
 const octokit = github.getOctokit(GITHUB_TOKEN);
 
-
 try {
-  // `who-to-greet` input defined in action metadata file
-  const nameToGreet = core.getInput('who-to-greet');
-  console.log(`Hello ${nameToGreet}!`);
-  const prdetails = core.getInput('pr-details');
-  console.log(`the pr details from main.yml ${prdetails}!`);
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  //console.log(`The event payload: ${payload}`);
+  const pr = github.context.payload.pull_request;
+  const prs = JSON.stringify(pr, undefined, 2)
+  console.log(`pr: ${prs}`);
   console.log(`*****************************`);
   const owner = github.context.payload.repository.owner.login;
   console.log(`owner: ${owner}`);
@@ -38,24 +32,30 @@ try {
     commitSha: commitHash
   })
 
-
   Promise.all([promise1, promise2]).then((values) => {
     console.log(values);
     let reviews = values[0];
+    let approvalCount = 0;
     for (let i = 0; i < reviews.length; i++) {
-      console.log(`...review states each..: ${reviews[i].state}`);
-      arr.push(reviews[i].state);
       if (reviews[i].state === 'APPROVED') {
         approvalCount++
       }
     }
-    console.log(arr);
     console.log(approvalCount);
-
     let status = values[1];
     let state = status.data.state;
-    //         console.log(`..state oFa PR..: ${state}`);
-
+    console.log(`..state oFa PR..: ${state}`);
+    if (state != "success" && approvalCount < 1 ) {
+      octokit.rest.issues.addLabels({
+        owner: owner,
+        repo: repo,
+        issue_number: prNumber,
+        labels: ["force-merged"]
+      }).then((response) => {
+        const responseStringified = JSON.stringify(response, undefined, 2)
+        console.log(`Issues: ${responseStringified}`);
+      });
+    }
   });
   // octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
   //   owner: owner,
