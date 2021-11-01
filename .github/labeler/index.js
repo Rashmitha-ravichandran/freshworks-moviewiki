@@ -20,43 +20,49 @@ try {
   console.log(`prNumber: ${prNumber}`);
   const commitHash = github.context.payload.pull_request.head.sha;
   console.log(`commitHash: ${commitHash}`);
+  const baseBranch = github.context.payload.pull_request.base.ref;
+  console.log(`baseBranch: ${baseBranch}`);
 
-  const promise1 = octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
-    owner: owner,
-    repo: repo,
-    pull_number: prNumber
-  })
-  const promise2 = octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
-    owner: owner,
-    repo: repo,
-    commitSha: commitHash
-  })
+  if (baseBranch == "master") {
+    console.log(`..inside first if..`);
+    const promise1 = octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
+      owner: owner,
+      repo: repo,
+      pull_number: prNumber
+    })
+    const promise2 = octokit.request("GET /repos/{owner}/{repo}/commits/{commitSha}/status", {
+      owner: owner,
+      repo: repo,
+      commitSha: commitHash
+    })
 
-  Promise.all([promise1, promise2]).then((values) => {
-    console.log(values);
-    let reviews = values[0];
-    let approvalCount = 0;
-    for (let i = 0; i < reviews.length; i++) {
-      if (reviews[i].state === 'APPROVED') {
-        approvalCount++
+    Promise.all([promise1, promise2]).then((values) => {
+      console.log(values);
+      let reviews = values[0];
+      let approvalCount = 0;
+      for (let i = 0; i < reviews.length; i++) {
+        if (reviews[i].state === 'APPROVED') {
+          approvalCount++
+        }
       }
-    }
-    console.log(approvalCount);
-    let status = values[1];
-    let state = status.data.state;
-    console.log(`..state oFa PR..: ${state}`);
-    if (state != "success" && approvalCount < 1 ) {
-      octokit.rest.issues.addLabels({
-        owner: owner,
-        repo: repo,
-        issue_number: prNumber,
-        labels: ["force-merged"]
-      }).then((response) => {
-        const responseStringified = JSON.stringify(response, undefined, 2)
-        console.log(`Issues: ${responseStringified}`);
-      });
-    }
-  });
+      console.log(approvalCount);
+      let status = values[1];
+      let state = status.data.state;
+      console.log(`..state oFa PR..: ${state}`);
+      if (state != "success" || approvalCount < 1) {
+        console.log(`..inside if..`);
+        octokit.rest.issues.addLabels({
+          owner: owner,
+          repo: repo,
+          issue_number: prNumber,
+          labels: ["force-merged"]
+        }).then((response) => {
+          const responseStringified = JSON.stringify(response, undefined, 2)
+          console.log(`Issues: ${responseStringified}`);
+        });
+      }
+    });
+  }
   // octokit.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", {
   //   owner: owner,
   //   repo: repo,
