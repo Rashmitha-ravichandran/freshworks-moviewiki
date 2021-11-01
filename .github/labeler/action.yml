@@ -1,6 +1,10 @@
-name: 'PR labeler'
-description: 'Check PR and label the force merged PRs'
+name: 'labeler'
+description: 'check pr and label force merged PRs'
 inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
   github-token:
     description: 'github-token'
     required: true

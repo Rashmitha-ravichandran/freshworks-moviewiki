@@ -33,6 +33,7 @@ jobs:
         uses: ./.github/labeler
         id: labeler
         with:
+          who-to-greet: 'Mona the Octocat'
           github-token: "${{ secrets.GITHUB_TOKEN }}"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
