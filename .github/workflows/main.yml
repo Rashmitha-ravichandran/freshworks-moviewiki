@@ -19,10 +19,11 @@
 
 on:
   pull_request:
-    types: [push, closed, edited]
+    types: [closed]
 
 jobs:
   lebeler_job:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: PR labler
     steps:
