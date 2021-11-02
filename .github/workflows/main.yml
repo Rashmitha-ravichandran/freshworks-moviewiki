@@ -19,12 +19,12 @@
 
 on:
   pull_request:
-    types: [closed]
+    types: [closed, edited]
 
 jobs:
   lebeler_job:
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     name: PR labler
     steps:
       - name: Checkout
@@ -38,7 +38,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       - run: npm ci
-      
+
 
 
 # on:
