@@ -1,0 +1,24 @@
+{
+  "name": "freshworks-moviewiki",
+  "version": "1.0.0",
+  "description": "A web application that enable users to search for any movie and view details about it.  A User can search the movie by it's title.  Different genre movies are also available.  More information about the chosen movie is available by clicking on it.  The movie database Api:http://www.omdbapi.com.  Run the application starting with moviewiki.html...",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rashmitha-ravichandran/freshworks-moviewiki.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rashmitha-ravichandran/freshworks-moviewiki/issues"
+  },
+  "homepage": "https://github.com/Rashmitha-ravichandran/freshworks-moviewiki#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@octokit/rest": "^18.12.0"
+  }
+}
