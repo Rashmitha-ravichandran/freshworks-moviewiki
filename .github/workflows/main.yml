@@ -19,16 +19,17 @@
 
 on:
   pull_request:
-    types: [ closed, edited]
+    types: [closed, edited]
 
 jobs:
   lebeler_job:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     name: PR labler
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v2
+      - run: npm ci
       - name: labeler check 
         uses: ./.github/labeler
         id: labeler
@@ -37,7 +38,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       - run: npm ci
-
+      
 
 
 # on:
