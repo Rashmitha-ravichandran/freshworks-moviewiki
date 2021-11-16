@@ -19,7 +19,7 @@
 
 on:
   pull_request:
-    types: [closed, edited]
+    types: [closed]
 
 jobs:
   lebeler_job:
