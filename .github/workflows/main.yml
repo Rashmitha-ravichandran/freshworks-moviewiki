@@ -23,6 +23,7 @@ on:
 
 jobs:
   lebeler_job:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: PR labler
     steps:
@@ -30,14 +31,37 @@ jobs:
         id: checkout
         uses: actions/checkout@v2
       - run: npm ci
-      - name: labeler check 
+      - name: labeler check
         uses: ./.github/labeler
         id: labeler
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      - run: npm ci
+
+
+# last working code
+# on:
+#   pull_request:
+#     types: [closed]
+
+# jobs:
+#   lebeler_job:
+#     runs-on: ubuntu-latest
+#     name: PR labler
+#     steps:
+#       - name: Checkout
+#         id: checkout
+#         uses: actions/checkout@v2
+#       - run: npm ci
+#       - name: labeler check 
+#         uses: ./.github/labeler
+#         id: labeler
+#         with:
+#           github-token: "${{ secrets.GITHUB_TOKEN }}"
+#         env:
+#           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+#       - run: npm ci
       
 
 
